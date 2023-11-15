@@ -20,23 +20,15 @@ import java.util.Date;
 import java.util.List;
 
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex, HttpHeaders headers,
-            HttpStatus status, WebRequest request) {
+public class RestExceptionHandler {
+    @Autowired
+    private MessageSource messageSource;
 
-        ErrorDetail errorDetail = new ErrorDetail();
-        errorDetail.setTimeStamp(new Date().getTime());
-        errorDetail.setStatus(status.value());
-        errorDetail.setTitle("Message Not Readable");
-        errorDetail.setDetail(ex.getMessage());
-        errorDetail.setDeveloperMessage(ex.getClass().getName());
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody ErrorDetail handleValidationError(MethodArgumentNotValidException
+                                                                   manve, HttpServletRequest request) {
 
-        return handleExceptionInternal(ex, errorDetail, headers, status, request);
-    }
-    @Override
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException manve, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ErrorDetail errorDetail = new ErrorDetail();
         // Populate errorDetail instance
         errorDetail.setTimeStamp(new Date().getTime());
@@ -67,8 +59,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             validationErrorList.add(validationError);
         }
 
-        // implementation removed for brevity
-
-        return handleExceptionInternal(manve, errorDetail, headers, status, request);
+        return errorDetail;
     }
 }
