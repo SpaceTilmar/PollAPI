@@ -1,12 +1,10 @@
 package com.apress.domain;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 @Entity
 public class PollOption {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="POLLOPTION_ID")
     private Long id;
     @Column(name="POLLOPTION_VALUE")
@@ -27,5 +25,16 @@ public class PollOption {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public PollOption() {
+    }
+
+    @Override
+    public String toString() {
+        return "PollOption{" +
+                "id=" + id +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

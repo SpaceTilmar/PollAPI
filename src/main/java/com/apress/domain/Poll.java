@@ -1,22 +1,14 @@
 package com.apress.domain;
 
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy ;
-import javax.swing.text.html.Option;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @Entity
+@Table(name = "poll")
 public class Poll {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="POLL_ID")
     private Long id;
 
@@ -27,8 +19,7 @@ public class Poll {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="POLL_ID")
     @OrderBy
-    @Size(min=2, max = 6)
-    private Set<Option> options;
+    private Set<PollOption> options;
     // Getters and Setters removed for brevity
 
     public Long getId() {
@@ -47,11 +38,29 @@ public class Poll {
         this.question = question;
     }
 
-    public Set<Option> getOptions() {
+    public Set<PollOption> getOptions() {
         return options;
     }
 
-    public void setOptions(Set<Option> options) {
+    public void setOptions(Set<PollOption> options) {
         this.options = options;
+    }
+
+    public Poll(Long id, String question, Set<PollOption> options) {
+        this.id = id;
+        this.question = question;
+        this.options = options;
+    }
+
+    public Poll() {
+    }
+
+    @Override
+    public String toString() {
+        return "Poll{" +
+                "id=" + id +
+                ", question='" + question + '\'' +
+                ", options=" + options +
+                '}';
     }
 }
